@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supplychain.dao.StoreMapper">
+    <resultMap id="BaseResultMap" type="com.supplychain.entity.Store">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="storeName" jdbcType="VARCHAR" property="storeName"/>
+        <result column="userName" jdbcType="VARCHAR" property="userName"/>
+    </resultMap>
+    <select id="selectByUserName" resultMap="BaseResultMap">
+        select id, storeName, userName
+        from store
+        where userName = #{userName}
+    </select>
+    <select id="selectByUserNameAndStoreName" resultMap="BaseResultMap">
+        select id, storeName, userName
+        from store
+        where userName = #{userName} and storeName = #{storeName}
+    </select>
+    <insert id="insert" parameterType="com.supplychain.entity.Store">
+        insert into store(storeName, userName)
+        values (#{storeName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR})
+    </insert>
+</mapper>

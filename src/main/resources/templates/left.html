@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>无标题文档</title>
+    <link href="../static/css/hy_scm.css" th:href="@{/css/hy_scm.css}" rel="stylesheet" type="text/css">
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+<div class="navbg">&nbsp;&nbsp;<span th:text="${#session.getAttribute('user').name}"></span></div>
+<div class=bg id=left>
+    <div>
+        <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" class="tablebg">
+            <TBODY>
+            <tr>
+                <td class="tableheadbg" align=left><p th:text="${lefts1.get(0).getTopTitle()}"></td>
+            </tr>
+            <tr>
+                <td align=left>
+                    <ul>
+                        <li class="level_1">
+                            <a th:href="${#request.getContextPath() + lefts1.get(0).getUrl()}" target=mainFrame>
+                                <img src="../static/images/list_menu_down.gif" th:if="${lefts1.size() != 1}" th:src="@{/images/list_menu_down.gif}" border="0">
+                                <img src="../static/images/list_menu_down.gif" th:if="${lefts1.size() == 1}" th:src="@{/images/list_menu_left.gif}" border="0">
+                                &nbsp;<span th:text="${lefts1.get(0).getLeftTitle()}"></span>
+                            </a>
+                        </li>
+                        <li class="level_2" th:if="${lefts1.size() != 1}" th:each="left, leftsStar:${lefts1}">
+                            <a th:href="${#request.getContextPath() + left.getUrl()}" target=mainFrame>
+                                <img src="../static/images/list_menu_left.gif" th:src="@{/images/list_menu_left.gif}" border="0">
+                                &nbsp;<span th:text="${left.getLeftRowData()}"></span>
+                            </a>
+                        </li>
+                    </Ul>
+                    <ul>
+                        <li class="level_1">
+                            <a th:if="${lefts2.size() >= 1}" th:href="${#request.getContextPath() + lefts2.get(0).getUrl()}" target=mainFrame>
+                                <img src="../static/images/list_menu_down.gif" th:if="${lefts2.size() != 1}" th:src="@{/images/list_menu_down.gif}" border="0">
+                                <img src="../static/images/list_menu_down.gif" th:if="${lefts2.size() == 1}" th:src="@{/images/list_menu_left.gif}" border="0">
+                                &nbsp;<span th:text="${lefts2.get(0).getLeftTitle()}"></span>
+                            </a>
+                        </li>
+                        <li class="level_2"  th:if="${lefts2.size() >= 2}" th:each="left, leftsStar:${lefts2}">
+                            <a th:href="${#request.getContextPath() + left.getUrl()}" target=mainFrame>
+                                <img src="../static/images/list_menu_left.gif" th:src="@{/images/list_menu_left.gif}" border="0">
+                                &nbsp;<span th:text="${left.getLeftRowData()}"></span>
+                            </a>
+                        </li>
+                    </Ul>
+                </td>
+            </tr>
+            </TBODY>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

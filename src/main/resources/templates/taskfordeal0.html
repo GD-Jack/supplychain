@@ -1,0 +1,319 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>门店商品销售日报</title>
+    <link href="../static/css/hy_scm.css" th:href="@{/css/hy_scm.css}" rel="stylesheet" type="text/css">
+    <script src="../static/js/util.js" th:src="@{/js/util.js}"></script>
+    <script src="../static/js/querycondition.js" th:src="@{/js/querycondition.js}"></script>
+    <script language="javascript" type="text/javascript" src="../static/js/My97DatePicker/WdatePicker.js" th:src="@{/js/My97DatePicker/WdatePicker.js}"></script>
+    <script language="javascript">
+        function checkQuery() {
+            //类型校验
+            var startdate = document.getElementById('startdate').value;
+            if (startdate != null && startdate.trim() != "") {
+                if (!isDate(startdate)) {
+                    alert("日期格式不对");
+                    document.getElementById('startdate').focus();
+                    return false;
+                }
+            }
+            var recorddate = document.getElementById('enddate').value;
+            if (recorddate != null && recorddate.trim() != "") {
+                if (!isDate(recorddate)) {
+                    alert("日期格式不对");
+                    document.getElementById('enddate').focus();
+                    return false;
+                }
+            }
+
+            var inj = injectInput(form1);
+            if (inj != "") {
+                alert("输入包含非法字符: " + inj);
+                return false;
+            }
+
+            document.getElementById('pageController.currentPage').value = 1;
+
+            form1.action.value = "list_daily_shop";
+            form1.submit();
+        }
+
+        function Export() {
+            //类型校验
+            //~~~~~
+            var inj = injectInput(form1);
+            if (inj != "") {
+                alert("输入包含非法字符: " + inj);
+                return false;
+            }
+            document.getElementById('pageController.currentPage').value = 1;
+            form1.action.value = "list_daily_execl";
+            form1.submit();
+            form1.action.value = "list_daily_shop";
+        }
+
+        function do_reset() {
+            form1.reset();
+            return true;
+        }
+    </script>
+    <script type="text/javascript" src="../static/js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+    <script type="text/javascript">
+        $(function () {
+            var date = new Date();
+            $("#startdate").val(date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay());
+            $("#enddate").val(date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay());
+        });
+    </script>
+
+</head>
+
+<body>
+
+<div class="navbg">您所在的位置：宏业供应链系统 &gt; 数据分析 &gt; 销售状况 &gt; <a
+        href="/sale/goodssale.do?action=condition_daily_shop&amp;moduleID=3/0/0/">门店商品销售日报</a></div>
+
+<div id="frame">
+    <div class="title">&nbsp;&nbsp;<img src="../static/images/dot_tablehead.gif"  th:src="@{/images/dot_tablehead.gif}" width="13" height="13">　门店商品销售日报
+    </div>
+
+    <form name="goodsSaleFormBean" id="form1" method="post" action="/sale/goodssale.do">
+        <input type="hidden" name="action" value="list_daily_shop" id="action">
+        <input type="hidden" name="moduleID" value="3/0/0/" id="moduleID">
+        <input type="hidden" name="showcondition" value="true" id="showcondition">
+        <input type="hidden" name="listtype" value="" id="listtype">
+        <div class="frameborder">
+            <div class="tableborder" id="condition">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" class="input_bg">
+                    <tbody>
+                    <tr>
+                        <td>门店编码：</td>
+                        <td>
+                            <!--<input type="text" name="query_deptcode.datavalue" maxlength="40" size="20" value="" id="query_deptcode.datavalue">-->
+                            <select name="query_deptcode.datavalue" id="query_deptcode.datavalue">
+                                <option value="" selected="selected"></option>
+                                <option value="001">日新百货西路店</option>
+                                <option value="003">日新百货里村店</option>
+                                <option value="007">日新百货通站店</option>
+                                <option value="009">日新百货太白园店</option>
+                                <option value="010">日新百货浮梁店</option>
+                                <option value="011">日新百货戴家弄店</option>
+                                <option value="012">日新百货黄泥头店</option>
+                                <option value="013">日新百货新厂店</option>
+                                <option value="015">日新百货陶新店</option>
+                                <option value="016">日新百货三宝店</option>
+                                <option value="017">日新百货陶溪川店</option>
+                                <option value="997">日新生鲜配送中心</option>
+                                <option value="998">日新常规配送中心</option>
+                            </select>
+                            <input type="hidden" name="query_deptcode.datatype" value="char"
+                                   id="query_deptcode.datatype">
+                            <input type="hidden" name="query_deptcode.datavalue_more" value=""
+                                   id="query_deptcode.datavalue_more">
+                            <input type="hidden" name="query_deptcode.match" value="1" id="query_deptcode.match">
+                        </td>
+                        <td>销售开始日期：</td>
+                        <td>
+                            <input type="text" name="startdate" maxlength="40" size="15"
+                                   onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" id="startdate">
+                        </td>
+                        <td>销售结束日期：</td>
+                        <td>
+                            <input type="text" name="enddate" maxlength="40" size="15"
+                                   onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" id="enddate">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>商品编码：</td>
+                        <td>
+                            <input type="text" name="query_gdsincode.datavalue" maxlength="40" size="20" value=""
+                                   id="query_gdsincode.datavalue">
+                            <input type="hidden" name="query_gdsincode.datatype" value="varchar"
+                                   id="query_gdsincode.datavalue">
+                            <input type="hidden" name="query_gdsincode.datavalue_more" value=""
+                                   id="query_gdsincode.datavalue_more">
+                            <input type="hidden" name="query_gdsincode.match" value="1" id="query_gdsincode.match">
+                        </td>
+                        <td>条码：</td>
+                        <td colspan="3">
+                            <input type="text" name="query_stripecode.datavalue" maxlength="40" size="20" value=""
+                                   id="query_stripecode.datavalue">
+                            <input type="hidden" name="query_stripecode.datatype" value="char"
+                                   id="query_stripecode.datatype">
+                            <input type="hidden" name="query_stripecode.datavalue_more" value=""
+                                   id="query_stripecode.datavalue_more">
+                            <input type="hidden" name="query_stripecode.match" value="1" id="query_stripecode.match">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>商品名称：</td>
+                        <td>
+                            <input type="text" name="query_gdsname.datavalue" maxlength="40" size="40" value=""
+                                   id="query_gdsname.datavalue">
+                            <input type="hidden" name="query_gdsname.datatype" value="varchar"
+                                   id="query_gdsname.datatype">
+                            <input type="hidden" name="query_gdsname.datavalue_more" value=""
+                                   id="query_gdsname.datavalue_more">
+                            <input type="hidden" name="query_gdsname.match" value="3" id="query_gdsname.datavalue_more">
+                        </td>
+                        <td>商品简拼：</td>
+                        <td colspan="3">
+                            <input type="text" name="query_gdspinyin.datavalue" maxlength="40" size="40" value=""
+                                   id="query_gdspinyin.datavalue">
+                            <input type="hidden" name="query_gdspinyin.datatype" value="varchar"
+                                   id="query_gdspinyin.datatype">
+                            <input type="hidden" name="query_gdspinyin.datavalue_more" value=""
+                                   id="query_gdspinyin.datavalue_more">
+                            <input type="hidden" name="query_gdspinyin.match" value="1" id="query_gdspinyin.match">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>生命周期：</td>
+                        <td>
+                            <select name="query_salecircle.datavalue" id="query_salecircle.datavalue">
+                                <option value="" selected="selected"></option>
+                                <option value="0">新品</option>
+                                <option value="10">正常品</option>
+                                <option value="11">断货</option>
+                                <option value="13">禁销</option>
+                                <option value="20">预淘汰</option>
+                                <option value="21">下架</option>
+                                <option value="22">过季</option>
+                                <option value="30">淘汰</option>
+                                <option value="31">作废</option>
+                            </select>
+                            <input type="hidden" name="query_salecircle.datatype" value="smallint"
+                                   id="query_salecircle.datatype">
+                            <input type="hidden" name="query_salecircle.datavalue_more" value=""
+                                   id="query_salecircle.datavalue_more">
+                            <input type="hidden" name="query_salecircle.match" value="1" id="query_salecircle.match">
+                        </td>
+                        <td>ABC分类：</td>
+                        <td colspan="3">
+                            <select name="query_abc.datavalue" id="query_abc.datavalue">
+                                <option value="" selected="selected"></option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="未定">未定</option>
+                            </select>
+                            <input type="hidden" name="query_abc.datatype" value="varchar" id="query_abc.datatype">
+                            <input type="hidden" name="query_abc.datavalue_more" value="" id="query_abc.datavalue_more">
+                            <input type="hidden" name="query_abc.match" value="1" id="query_abc.match">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>商品类别：</td>
+                        <td><input type="text" name="query_classcode.datavalue" maxlength="40" size="40" value=""
+                                   id="query_classcode.datavalue">
+                            <input type="hidden" name="query_classcode.datatype" value="varchar"
+                                   id="query_classcode.datatype">
+                            <input type="hidden" name="query_classcode.datavalue_more" value=""
+                                   id="query_classcode.datavalue_more">
+                            <input type="hidden" name="query_classcode.match" value="1" id="query_classcode.match"></td>
+                        <td>类别名称:</td>
+                        <td colspan="3"><input type="text" name="query_classname.datavalue" maxlength="40" size="40"
+                                               value="" id="query_classname.datavalue">
+                            <input type="hidden" name="query_classname.datatype" value="varchar"
+                                   id="query_classname.datatype">
+                            <input type="hidden" name="query_classname.datavalue_more" value=""
+                                   id="query_classname.datavalue_more">
+                            <input type="hidden" name="query_classname.match" value="3" id="query_classname.match"></td>
+                    </tr>
+                    <tr>
+                        <td>商品品牌：</td>
+                        <td><input type="text" name="query_brandcode.datavalue" maxlength="40" size="40" value=""
+                                   id="query_brandcode.datavalue">
+                            <input type="hidden" name="query_brandcode.datatype" value="varchar"
+                                   id="query_brandcode.datatype">
+                            <input type="hidden" name="query_brandcode.datavalue_more" value=""
+                                   id="query_brandcode.datavalue_more">
+                            <input type="hidden" name="query_brandcode.match" value="1" id="query_brandcode.match"></td>
+                        <td>品牌名称:</td>
+                        <td colspan="3"><input type="text" name="query_brand.datavalue" maxlength="40" size="40"
+                                               value="" id="query_brand.datavalue">
+                            <input type="hidden" name="query_brand.datatype" value="varchar" id="query_brand.datatype">
+                            <input type="hidden" name="query_brand.datavalue_more" value=""
+                                   id="query_brand.datavalue_more">
+                            <input type="hidden" name="query_brand.match" value="1" id="query_brand.match"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="Submit">
+                <input type="button" class="Button" value="查&nbsp;&nbsp;&nbsp;&nbsp;询"
+                       onclick="javascript:checkQuery();">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" class="Button" value="重&nbsp;&nbsp;&nbsp;&nbsp;置" onclick="javascript:do_reset();">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" id="spanexport" class="Button" value="导&nbsp;&nbsp;出EXECL"
+                       onclick="javascript:Export();">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" class="Button" value="隐藏条件"
+                       onclick="javascript:conditionDisplayChange(this,condition,form1);">
+            </div>
+        </div>
+
+
+        <div class="frameborder">
+            <div class="tableborder">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tbody>
+                    <tr bgcolor="DDE8FC">
+                        <td width="60%">
+                            [<a href="javascript:window.location.reload()">刷新</a>]
+                            《 首页 上页
+                            <a href="javascript:document.getElementById('pageController.currentPage').value=2;setEnabled(form1);form1.submit()">下页</a>
+                            <a href="javascript:document.getElementById('pageController.currentPage').value=8;setEnabled(form1);form1.submit()">末页</a>
+                            》
+                            共 144 条，第 <select id="pageController.currentPage" name="pageController.currentPage" size="1"
+                                              onchange="javascript:setEnabled(form1);form1.submit()">
+                            <option value="1" selected="">1
+                            </option>
+                            <option value="2">2
+                            </option>
+                            <option value="3">3
+                            </option>
+                            <option value="4">4
+                            </option>
+                            <option value="5">5
+                            </option>
+                            <option value="6">6
+                            </option>
+                            <option value="7">7
+                            </option>
+                            <option value="8">8
+                            </option>
+                        </select>/ 8页 <select id="pageController.pageSize" name="pageController.pageSize" size="1"
+                                              onchange="javascript:setEnabled(form1);form1.submit()">
+                            <option value="20" selected="">20
+                            </option>
+                            <option value="50">50
+                            </option>
+                            <option value="100">100
+                            </option>
+                            <option value="500">500
+                            </option>
+                            <option value="1000">1000
+                            </option>
+                            <option value="10000">10000
+                            </option>
+                        </select>条
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    addEnterKey(form1);
+    setExport("spanexport", "1");
+    addDoubleclick(form1, "");
+    conditionDisplay(this, condition, form1);
+</script>
+</body>
+</html>

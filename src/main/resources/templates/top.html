@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>供应链系统</title>
+    <link href="../static/css/hy_scm.css" th:href="@{/css/hy_scm.css}" rel="stylesheet" type="text/css">
+</head>
+<script language="javascript">
+
+    function switchTab(tab) {
+        closeAllTab();
+        tab.className = "normalactive";
+    }
+
+    function closeAllTab() {
+        var tabs = document.getElementsByTagName("span");
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].className = "normalback"
+        }
+    }
+
+</script>
+
+<style>
+    #name {
+        font-size: 40px;
+        color: red;
+        font-family: 楷体;
+        align: center;
+        width: 250px;
+        valign: top;
+    }
+</style>
+
+<body>
+<div id="Menu">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td th:text="${#session.getAttribute('user').name}" id="name"></td>
+            <td height="46px">
+                <div class="staticlink"><a
+                        th:href="${#request.getContextPath()} + '/user/logout'" target="_top">重新登录</a> | <a
+                        th:href="${#request.getContextPath()} + '/user/logout'"
+                        target="_top">退出</a></div>
+                <img float="left" align="left" vertical-align="middle" src="../static/images/menu_normal_1.gif"
+                     th:src="@{/images/menu_normal_1.gif}" width="6"
+                     height="27"></img>
+
+                <span id="submenu" vertical-align="middle" class=normalactive onClick="switchTab(this)"><a
+                        th:href="${#request.getContextPath()} + '/left?type=1'" target="leftFrame">系统维护</a></span>
+
+
+                <span id="submenu" vertical-align="middle" class=normalback onClick="switchTab(this)"><a
+                        th:href="${#request.getContextPath()} + '/left?type=2'" target="leftFrame">档案资料</a></span>
+
+
+                <span id="submenu" vertical-align="middle" class=normalback onClick="switchTab(this)"><a
+                        th:href="${#request.getContextPath()} + '/left?type=3'" target="leftFrame">采购管理</a></span>
+
+
+                <span id="submenu" vertical-align="middle" class=normalback onClick="switchTab(this)"><a
+                        th:href="${#request.getContextPath()} + '/left?type=4'" target="leftFrame">数据分析</a></span>
+
+
+                <span id="submenu" vertical-align="middle" class=normalback onClick="switchTab(this)"><a
+                        th:href="${#request.getContextPath()} + '/left?type=5'" target="leftFrame">帐务结算</a></span>
+
+
+                <span id="submenu" vertical-align="middle" class=normalback onClick="switchTab(this)"><a
+                        th:href="${#request.getContextPath()} + '/left?type=6'" target="leftFrame">消息通知</a></span>
+
+
+                <span id="submenu" vertical-align="middle" class=normalback onClick="switchTab(this)"><a
+                        th:href="${#request.getContextPath()} + '/left?type=7'" target="leftFrame">证件信息</a></span>
+
+
+                <img float="left" align="left" valign="bottom" src="../static/images/menu_normal_5.gif"
+                     th:src="@{/images/menu_normal_5.gif}" width="6"
+                     height="27"></img>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supplychain.dao.CommodityMapper">
+    <resultMap id="BaseResultMap" type="com.supplychain.entity.Commodity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="commodityId" jdbcType="INTEGER" property="commodityId"/>
+        <result column="commodityName" jdbcType="VARCHAR" property="commodityName"/>
+        <result column="commodityCode" jdbcType="VARCHAR" property="commodityCode"/>
+        <result column="salesVolumes" jdbcType="INTEGER" property="salesVolumes"/>
+        <result column="price" jdbcType="REAL" property="price"/>
+        <result column="cost" jdbcType="REAL" property="cost"/>
+        <result column="unit" jdbcType="CHAR" property="unit"/>
+        <result column="userName" jdbcType="VARCHAR" property="userName"/>
+        <result column="date" jdbcType="DATE" property="date"/>
+        <result column="storeName" jdbcType="VARCHAR" property="storeName"/>
+    </resultMap>
+    <resultMap id="BaseResultMap2" type="com.supplychain.entity.Commodity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="commodityId" jdbcType="INTEGER" property="commodityId"/>
+        <result column="commodityName" jdbcType="VARCHAR" property="commodityName"/>
+        <result column="commodityCode" jdbcType="VARCHAR" property="commodityCode"/>
+        <result column="salesVolumes" jdbcType="INTEGER" property="salesVolumes"/>
+        <result column="price" jdbcType="REAL" property="price"/>
+        <result column="cost" jdbcType="REAL" property="cost"/>
+        <result column="unit" jdbcType="CHAR" property="unit"/>
+        <result column="userName" jdbcType="VARCHAR" property="userName"/>
+        <result column="date" jdbcType="VARCHAR" property="date"/>
+        <result column="storeName" jdbcType="VARCHAR" property="storeName"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.supplychain.entity.Commodity">
+        insert into commodity (commodityId, commodityName, commodityCode,
+                               salesVolumes, price, cost,
+                               unit, userName, date, storeName)
+        values (#{commodityId,jdbcType=INTEGER}, #{commodityName,jdbcType=VARCHAR}, #{commodityCode,jdbcType=VARCHAR},
+                #{salesVolumes,jdbcType=INTEGER}, #{price,jdbcType=REAL}, #{cost,jdbcType=REAL},
+                #{unit,jdbcType=CHAR}, #{userName,jdbcType=VARCHAR}, #{date,jdbcType=TIME},
+                #{storeName,jdbcType=VARCHAR})
+    </insert>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id,
+               commodityId,
+               commodityName,
+               commodityCode,
+               salesVolumes,
+               price,
+               cost,
+               unit,
+               userName, date, storeName
+        from commodity
+        order by date desc
+    </select>
+    <select id="selectByUserName" resultMap="BaseResultMap">
+        select id,
+               commodityId,
+               commodityName,
+               commodityCode,
+               salesVolumes,
+               price,
+               cost,
+               unit,
+               userName, date, storeName
+        from commodity
+        where userName = #{userName}
+        order by date desc
+    </select>
+    <select id="selectByUserNameAndStoreName" resultMap="BaseResultMap">
+        select id,
+               commodityId,
+               commodityName,
+               commodityCode,
+               salesVolumes,
+               price,
+               cost,
+               unit,
+               userName, date, storeName
+        from commodity
+        where userName = #{userName}
+          and storeName = #{storeName}
+        order by date desc
+    </select>
+    <select id="select" resultMap="BaseResultMap">
+        select id, commodityId, commodityName, commodityCode, salesVolumes, price, cost, unit, userName, date, storeName
+        from commodity
+        <where>
+            id > 0
+            <if test="userName != null and userName != ''">
+                and userName = #{userName}
+            </if>
+            <if test="storeName != null and storeName != ''">
+                and storeName = #{storeName}
+            </if>
+            <if test="start != null and start != ''">
+                and <![CDATA[date >= #{start,jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="end != null and end != ''">
+                and <![CDATA[date <= #{end,jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="commodityId != null and commodityId != ''">
+                and commodityId = #{commodityId}
+            </if>
+            <if test="commodityCode != null and commodityCode != ''">
+                and commodityCode = #{commodityCode}
+            </if>
+            <if test="commodityName != null and commodityName != ''">
+                and commodityName like '%${commodityName}%'
+            </if>
+        </where>
+    </select>
+    <select id="selectSum" resultMap="BaseResultMap2">
+        select commodityId, commodityName, commodityCode, sum(salesVolumes) as salesVolumes, price, cost, unit, #{limitDate} as date, storeName
+        from commodity
+        <where>
+            id > 0
+            <if test="userName != null and userName != ''">
+                and userName = #{userName}
+            </if>
+            <if test="storeName != null and storeName != ''">
+                and storeName = #{storeName}
+            </if>
+            <if test="start != null and start != ''">
+                and <![CDATA[date >= #{start,jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="end != null and end != ''">
+                and <![CDATA[date <= #{end,jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="commodityId != null and commodityId != ''">
+                and commodityId = #{commodityId}
+            </if>
+            <if test="commodityCode != null and commodityCode != ''">
+                and commodityCode = #{commodityCode}
+            </if>
+            <if test="commodityName != null and commodityName != ''">
+                and commodityName like '%${commodityName}%'
+            </if>
+        </where> group by commodityId, commodityName, commodityCode, price, cost, unit, storeName
+    </select>
+</mapper>

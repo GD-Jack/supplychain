@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supplychain.dao.LeftRowMapper">
+  <resultMap id="BaseResultMap" type="com.supplychain.entity.LeftRow">
+    <id column="leftRowId" jdbcType="INTEGER" property="leftRowId" />
+    <result column="leftRowData" jdbcType="VARCHAR" property="leftRowData" />
+    <result column="topTitle" jdbcType="VARCHAR" property="topTitle" />
+    <result column="leftTitle" jdbcType="VARCHAR" property="leftTitle" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+
+  <select id="selectByTopId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select leftRowId, leftRowData, topTitle, `left`.leftTitle, url
+    from leftrow, `left`, top
+    where `left`.leftId = leftrow.leftId and `left`.topId = top.topId and top.topId = #{topId};
+  </select>
+
+</mapper>

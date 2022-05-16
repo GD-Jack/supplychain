@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>门店商品销售日报</title>
+    <link href="../static/css/hy_scm.css" th:href="@{/css/hy_scm.css}" rel="stylesheet" type="text/css">
+    <script src="../static/js/util.js" th:src="@{/js/util.js}"></script>
+    <script src="../static/js/querycondition.js" th:src="@{/js/querycondition.js}"></script>
+    <script language="javascript" type="text/javascript" src="../static/js/My97DatePicker/WdatePicker.js"
+            th:src="@{/js/My97DatePicker/WdatePicker.js}"></script>
+
+    <script type="text/javascript" src="../static/js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+        var pageCount;
+        $(function () {
+            pageCount = +[[${#session.getAttribute("pageCount")}]];
+            $("#pageCount").text(pageCount + " 页");
+            for (var page = 1; page <= pageCount; page++) {
+                $("#page").append("<option value='" + page + "' >" + page + "</option>");
+            }
+            $("#first").click(function () {
+                $("#page").val(1);
+                $("#form1").submit();
+            });
+            $("#last").click(function () {
+                $("#page").val(pageCount);
+                $("#form1").submit();
+            });
+            $("#previous").click(function () {
+                var pageNum = $("#page").val() - 1;
+                if (pageNum <= 0) {
+                    pageNum += pageCount
+                }
+                $("#page").val(pageNum);
+                $("#form1").submit();
+            });
+            $("#next").click(function () {
+                var pageNum = $("#page").val() * 1 + 1;
+                if (pageNum > pageCount) {
+                    pageNum -= pageCount
+                }
+                $("#page").val(pageNum);
+                $("#form1").submit();
+            });
+            $("#page").change(function () {
+                $("#form1").submit();
+            });
+        });
+        function checkQuery(num) {
+            var startdate = document.getElementById('startdate').value;
+            if (startdate != null && startdate.trim() != "") {
+                if (!isDate(startdate)) {
+                    alert("日期格式不对");
+                    document.getElementById('startdate').focus();
+                    return false;
+                }
+            }
+            var recorddate = document.getElementById('enddate').value;
+            if (recorddate != null && recorddate.trim() != "") {
+                if (!isDate(recorddate)) {
+                    alert("日期格式不对");
+                    document.getElementById('enddate').focus();
+                    return false;
+                }
+            }
+            $("#flag").val(num);
+            $("#form1").submit();
+        }
+        function refresh() {
+            $.ajax({
+                url: [[${#request.getContextPath()}]] + "/getPageCount",
+                dataType: "text",
+                contentType:'application/text;charset=UTF-8',
+                success: function (result) {
+                    pageCount = +result;
+                    $("#pageCount").text(pageCount + "页");
+                    $("#page").find("option").remove();
+                    for (var page = 1; page <= pageCount; page++) {
+                        $("#page").append("<option value='" + page + "' >" + page + "</option>");
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+
+<body>
+
+<div class="navbg">您所在的位置：景德镇供应链系统 &gt; 数据分析 &gt; 销售状况 &gt; <a href="#">门店商品销售统计</a></div>
+
+<div id="frame">
+    <div class="title">&nbsp;&nbsp;<img src="../static/images/dot_tablehead.gif" th:src="@{/images/dot_tablehead.gif}" width="13" height="13">　门店商品销售统计
+    </div>
+
+    <form name="goodsSaleFormBean" id="form1" th:action="${#request.getContextPath()} + '/commodity'" target="mainFrame">
+        <input type="hidden" name="tableName" value="commodity">
+        <div class="frameborder">
+            <div class="tableborder" id="condition">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" class="input_bg">
+                    <tbody>
+                    <tr>
+                        <td>门店名称：</td>
+                        <td>
+                            <select name="storeName">
+                                <option value="" selected="selected"></option>
+                                <option th:each="store:${stores}" th:value="${store.getStoreName()}"
+                                        th:text="${store.getStoreName()}"></option>
+                            </select>
+                        <td>开始日期：</td>
+                        <td>
+                            <input type="text" name="startdate" maxlength="40" size="15"
+                                   onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd',alwaysUseStartDate:true})"
+                                   id="startdate">
+                        </td>
+                        <td>结束日期：</td>
+                        <td>
+                            <input type="text" name="enddate" maxlength="40" size="15"
+                                   onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" id="enddate">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>商品编码：</td>
+                        <td>
+                            <input type="text" name="commodityId" maxlength="40" size="20" value="">
+                        </td>
+                        <td>条码：</td>
+                        <td>
+                            <input type="text" name="commodityCode" maxlength="40" size="20" value="">
+                        </td>
+                        <td>商品名称：</td>
+                        <td>
+                            <input type="text" name="commodityName" maxlength="40" size="40" value="">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="Submit">
+                <input type="hidden" name="flag" id="flag">
+                <input type="button" class="Button" value="查&nbsp;&nbsp;&nbsp;&nbsp;询" id="query"
+                       onmousedown="checkQuery(1);" onmouseup="refresh();">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" class="Button" value="合计查询" id="queryCount"
+                       onmousedown="checkQuery(2);" onmouseup="refresh();">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="reset" class="Button" value="重&nbsp;&nbsp;&nbsp;&nbsp;置">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" class="Button" value="隐藏条件"
+                       onclick="javascript:conditionDisplayChange(this,condition,form1);">
+            </div>
+        </div>
+        <div class="frameborder">
+            <div class="tableborder">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tbody>
+                    <tr bgcolor="DDE8FC">
+                        <td width="60%">
+                            [<a href="javascript:refresh()">刷新</a>]
+                            《
+                            <a href="#" id="first">首页</a>
+                            <a href="#" id="previous">上页</a>
+                            <a href="#" id="next">下页</a>
+                            <a href="#" id="last">末页</a>》 第
+                            <select id="page" name="pageNum" size="1">
+
+                            </select>
+                            <span id="pageCount"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

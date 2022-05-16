@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>宏业供应链系统</title>
+    <script>
+        function resize() {
+            var windowWidth, windowHeight;
+            if (barFrame.innerHeight) {  // all except Explorer
+                windowWidth = barFrame.innerWidth;
+                windowHeight = barFrame.innerHeight;
+            } else if (barFrame.document.documentElement && barFrame.document.documentElement.clientHeight) { // Explorer 6 Strict Mode
+                windowWidth = barFrame.document.documentElement.clientWidth;
+                windowHeight = barFrame.document.documentElement.clientHeight;
+            } else if (barFrame.document.body) { // other Explorers
+                windowWidth = barFrame.document.body.clientWidth;
+                windowHeight = barFrame.document.body.clientHeight;
+            }
+            barFrame.document.all("tbl").height = windowHeight - barFrame.document.all("nav").offsetHeight;
+        }
+    </script>
+</head>
+<frameset rows="75,*" cols="*" frameborder="NO" border="0" framespacing="0" onresize="resize();">
+    <frame src="top.html" name="topFrame" scrolling="NO" noresize>
+    <frameset rows="*" cols="170,12,*" framespacing="0" frameborder="NO" border="0" id="pageFrame">
+        <!-- <frameset rows="*" cols="170,18,*" framespacing="0" frameborder="NO" border="0" id="pageFrame">   -->
+        <frame src="left.html" name="leftFrame" scrolling="NO" noresize>
+        <frame src="bar.html" name="barFrame" noresize>
+        <!--     <frame src="scm_page/frame/mainFrame.jsp" name="mainFrame" noresize>  -->
+        <frame src="taskfordeal0.html" name="mainFrame" noresize>
+
+    </frameset>
+</frameset>
+<noframes>
+    <body>
+    </body>
+</noframes>
+</html>

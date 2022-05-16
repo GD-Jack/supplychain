@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supplychain.dao.ColumnMapper">
+    <resultMap id="BaseResultMap" type="com.supplychain.entity.Column">
+        <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName"/>
+        <result column="COLUMN_NAME" jdbcType="VARCHAR" property="columnName"/>
+        <result column="COLUMN_COMMENT" jdbcType="VARCHAR" property="columnComment"/>
+    </resultMap>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select table_name, COLUMN_NAME, COLUMN_COMMENT
+        from INFORMATION_SCHEMA.COLUMNS
+    </select>
+    <select id="selectColumn" resultMap="BaseResultMap">
+        select table_name, COLUMN_NAME, COLUMN_COMMENT
+        from INFORMATION_SCHEMA.COLUMNS
+        Where table_name = #{tableName} and table_schema = 'supplychain' and column_name = #{columnName}
+    </select>
+    <select id="selectTableColumn" resultMap="BaseResultMap">
+        select table_name, COLUMN_NAME, COLUMN_COMMENT
+        from INFORMATION_SCHEMA.COLUMNS
+        Where table_name = #{tableName} and table_schema = 'supplychain' order by ORDINAL_POSITION
+    </select>
+</mapper>

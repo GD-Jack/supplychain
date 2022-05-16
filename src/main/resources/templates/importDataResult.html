@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>导入结果</title>
+    <style type="text/css">
+        body {
+            margin: 0px;
+            padding: 0px;
+            font-family: 正楷;
+        }
+        #div1 {
+            width: 1280px;
+            height: 630px;
+            position: relative;
+            margin: 0 auto auto auto;
+            border: 1px solid #fff;
+            border-radio: 5px;
+        }
+        #div2 {
+            width: 400px;
+            height: 320px;
+            position: absolute;
+            left: 480px;
+            top: 240px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="div1">
+    <div id="div2">
+        <p th:text="${#session.getAttribute('insertMsg')}"></p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script src="../static/js/util.js" th:src="@{/js/util.js}"></script>
+    <script src="../static/js/querycondition.js" th:src="@{/js/querycondition.js}"></script>
+    <link href="../static/css/hy_scm.css" th:href="@{/css/hy_scm.css}" rel="stylesheet" type="text/css">
+
+    <script language="javascript">
+        function switchSysBar() {
+            if (parent.document.getElementById('pageFrame').cols == "170,12,*") {
+                document.getElementById('leftbar').style.display = "";
+                parent.document.getElementById('pageFrame').cols = "0,12,*";
+            } else {
+                document.getElementById('leftbar').style.display = "none"
+                parent.document.getElementById('pageFrame').cols = "170,12,*";
+            }
+
+            /***************
+             if (switchPoint.innerText==7) {
+        switchPoint.innerText = 8
+        //parent.leftFrame.document.all("left").style.display="none"
+        //parent.leftFrame.document.all("nav").style.display="none"
+        parent.document.all.pageFrame.cols = "0,18,*";
+    } else {
+         switchPoint.innerText=7
+         //parent.leftFrame.document.all("left").style.display=""
+         //parent.leftFrame.document.all("nav").style.display=""
+         parent.document.all.pageFrame.cols = "170,18,*";
+    }
+             ***************/
+        }
+
+        function resize() {
+            var windowWidth, windowHeight;
+            if (self.innerHeight) {  // all except Explorer
+                windowWidth = self.innerWidth;
+                windowHeight = self.innerHeight;
+            } else if (document.documentElement && document.documentElement.clientHeight) { // Explorer 6 Strict Mode
+                windowWidth = document.documentElement.clientWidth;
+                windowHeight = document.documentElement.clientHeight;
+            } else if (document.body) { // other Explorers
+                windowWidth = document.body.clientWidth;
+                windowHeight = document.body.clientHeight;
+            }
+
+            tbl.height = windowHeight - nav.offsetHeight;
+        }
+    </script>
+</head>
+
+<body onresize="resize();" scroll="no" style="MARGIN: 0px">
+
+<div class="navbg" id="nav"></div>
+<div id="bar">
+    <TABLE id="tbl">
+        <TR>
+            <TD id=leftbar style="DISPLAY: none">
+                <A onclick=switchSysBar() href="javascript:void(0);">
+                    <IMG height=90 alt=展开左侧菜单 src="../static/images/rightbar.gif" th:src="@{/images/rightbar.gif}" width=9 border=0>
+                </A>
+            </TD>
+            <TD id=rightbar>
+                <A onclick=switchSysBar() href="javascript:void(0);">
+                    <IMG height=90 alt=隐藏左侧菜单 src="../static/images/rightbar.gif" th:src="@{/images/rightbar.gif}" width=9 border=0>
+                </A>
+            </TD>
+        </TR>
+    </TABLE>
+</div>
+<script>
+    resize();
+</script>
+</body>
+</html>

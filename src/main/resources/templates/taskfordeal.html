@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>门店商品销售日报</title>
+    <link href="../static/css/hy_scm.css" th:href="@{/css/hy_scm.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="frame">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <thead>
+        <tr>
+            <th th:unless="${column.getColumnComment().equals('id') || column.getColumnComment().equals('用户名')}"
+                th:each="column:${columns}"><p th:text="${column.columnComment}"></p></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="commodity:${commodities}">
+            <td th:text="${commodity.getCommodityId()}"></td>
+            <td th:text="${commodity.getCommodityName()}"></td>
+            <td th:text="${commodity.getCommodityCode()}"></td>
+            <td th:text="${commodity.getSalesVolumes()}"></td>
+            <td th:text="${commodity.getPrice()}"></td>
+            <td th:text="${commodity.getCost()}"></td>
+            <td th:text="${commodity.getUnit()}"></td>
+            <td th:text="${commodity.getDate()}"></td>
+            <td th:text="${commodity.getStoreName()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
